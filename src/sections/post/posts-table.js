@@ -59,7 +59,7 @@ export const PostsTable = (props) => {
     try {
       if (selectedId) {
         setOpenPopDel(false);
-        const response = await instance.delete(`/activities/${selectedId}`);
+        const response = await instance.delete(`/posts/${selectedId}`);
 
         if (response.status === 200) {
           setText((oldText) => ({

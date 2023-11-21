@@ -35,6 +35,7 @@ const PageAddPost = () => {
   const [data, setData] = useState({
     title: "",
     body: "",
+    user_id: "1" ,
     images: "",
     status: "Active",
   });
@@ -50,6 +51,7 @@ const PageAddPost = () => {
     const postData = {
       title: data.title,
       body: data.body,
+      user_id: "1" ,
       images: data.images,
       status: data.status,
     };
@@ -306,7 +308,7 @@ const PageAddPost = () => {
               onClick={handleAddPost}
               className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
             >
-              Thêm hoạt động
+              Thêm bài viết
             </button>
           </div>
         </form>
