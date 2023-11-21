@@ -7,6 +7,8 @@ import { DayAdd } from "../sections/day/day-add";
 import axios from "axios";
 import { instance } from "src/api";
 import { useRouter } from "next/router";
+import { toast } from "react-toastify";
+
 
 // Define the API endpoint
 
@@ -51,8 +53,11 @@ const PageAddActivity = () => {
       console.log(">>>>>");
 
       if (response.status === 200) {
-        console.log("Activity updated successfully!");
-        SetActivityDatas(response)
+        SetActivityData(response)
+        toast.success("Cập nhật hoạt động thành công!", {
+          position: toast.POSITION.TOP_RIGHT,
+        });
+        router.push("/activity");
       } else {
         console.error("Failed to update activity");
       }

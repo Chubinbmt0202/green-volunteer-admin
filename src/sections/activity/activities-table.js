@@ -5,6 +5,8 @@ import { Dialog, Transition } from "@headlessui/react";
 import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
 import { Spin } from "antd";
 import { useRouter, withRouter } from "next/router";
+import { Menu } from "@headlessui/react";
+import { ChevronDownIcon } from "@heroicons/react/20/solid";
 import {
   Avatar,
   Box,
@@ -27,7 +29,8 @@ import { useRecoilState } from "recoil";
 import { textState } from "src/constants/constants";
 
 export const ActivitiesTable = (props) => {
-  const [open, setOpen] = useState(false);
+  const [openPopDel, setOpenPopDel] = useState(false);
+  const [openPopUpDate, setOpenPopUpdate] = useState(false);
   const cancelButtonRef = useRef(null);
   const {
     count = 0,
@@ -47,12 +50,15 @@ export const ActivitiesTable = (props) => {
   const selectedAll = items.length > 0 && selected.length === items.length;
   const [selectedId, setSelectedId] = useState("");
   const [text, setText] = useRecoilState(textState);
-  const router = useRouter()
+  const router = useRouter();
+  function classNames(...classes) {
+    return classes.filter(Boolean).join(" ");
+  }
 
   const handleDelete = async () => {
     try {
       if (selectedId) {
-        setOpen(false);
+        setOpenPopDel(false);
         const response = await instance.delete(`/activities/${selectedId}`);
 
         if (response.status === 200) {
@@ -77,15 +83,13 @@ export const ActivitiesTable = (props) => {
   };
 
   const handleUpdate = (id) => {
-    router.push(`/updateActivity?id=${id}` );
+    router.push(`/updateActivity?id=${id}`);
   };
-  
 
   return (
     <Card>
       <Scrollbar>
         <Box sx={{ minWidth: 800 }}>
-          {/* <Spin size="large" className="flex justify-center items-center   " /> */}
           <Table>
             <TableHead>
               <TableRow>
@@ -108,18 +112,14 @@ export const ActivitiesTable = (props) => {
                 <TableCell>Số lượng</TableCell>
                 <TableCell>Địa chỉ</TableCell>
                 <TableCell>Trạng thái</TableCell>
-                <TableCell>Chức năng</TableCell>
+                <TableCell>Hoạt động</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {items.map((activity) => {
                 const isSelected = selected.includes(activity.id);
-                // const createdAt = format(customer.createdAt, "dd/MM/yyyy");
-
                 return (
-                  <TableRow hover 
-                  key={activity.id} 
-                  selected={isSelected}>
+                  <TableRow hover key={activity.id} selected={isSelected}>
                     <TableCell padding="checkbox">
                       <Checkbox
                         checked={isSelected}
@@ -133,9 +133,7 @@ export const ActivitiesTable = (props) => {
                       />
                     </TableCell>
                     <TableCell>
-                      <Stack alignItems="center" 
-                      direction="row" 
-                      spacing={2}>
+                      <Stack alignItems="center" direction="row" spacing={2}>
                         <Typography variant="subtitle2">{activity.title}</Typography>
                       </Stack>
                     </TableCell>
@@ -143,37 +141,81 @@ export const ActivitiesTable = (props) => {
                     <TableCell>{activity.time_end}</TableCell>
                     <TableCell>{activity.num_vol}</TableCell>
                     <TableCell>{activity.address}</TableCell>
-                    {/* <TableCell>{createdAt}</TableCell> */}
                     <TableCell>{"Đang"}</TableCell>
-                    <TableCell>
+                    <TableCell >
                       {
-                        <div className="flex">
-                          <button
-                            onClick={() => {
-                              setOpen(true);
-                              setSelectedId(activity.id);
-                            }}
-                            className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full"
-                          >
-                            Xoá
-                          </button>
+                        <Menu as="div" className="relative inline-block text-left">
+                          <div>
+                            <Menu.Button className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm text-gray-900  ring-gray-300 hover:bg-gray-50">
+                              Options
+                              <ChevronDownIcon
+                                className="-mr-1 h-5 w-5 text-gray-400"
+                                aria-hidden="true"
+                              />
+                            </Menu.Button>
+                          </div>
 
-                          <button onClick={() => {setSelectedId(activity.id), handleUpdate(activity.id)}} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">
-                            Sửa
-                          </button>
-                        </div>
+                          <Transition
+                            as={Fragment}
+                            enter="transition ease-out duration-100"
+                            enterFrom="transform opacity-0 scale-95"
+                            enterTo="transform opacity-100 scale-100"
+                            leave="transition ease-in duration-75"
+                            leaveFrom="transform opacity-100 scale-100"
+                            leaveTo="transform opacity-0 scale-95"
+                            className="z-20"
+                          >
+                            <Menu.Items className="absolute z-10 mt-2 w-24 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                              <div className="py-1">
+                                <Menu.Item>
+                                  {({ active }) => (
+                                    <a
+                                      onClick={() => {
+                                        setOpenPopDel(true);
+                                        setSelectedId(activity.id);
+                                      }}
+                                      className={classNames(
+                                        active ? "bg-gray-100 text-gray-900" : "text-gray-700",
+                                        "block px-4 py-2 text-sm"
+                                      )}
+                                    >
+                                      Xoá
+                                    </a>
+                                  )}
+                                </Menu.Item>
+                                <form method="POST" action="#">
+                                  <Menu.Item>
+                                    {({ active }) => (
+                                      <a
+                                        onClick={() => {
+                                          setSelectedId(activity.id), handleUpdate(activity.id);
+                                        }}
+                                        className={classNames(
+                                          active ? "bg-gray-100 text-gray-900" : "text-gray-700",
+                                          "block w-full px-4 py-2 text-left text-sm"
+                                        )}
+                                      >
+                                        Sửa
+                                      </a>
+                                    )}
+                                  </Menu.Item>
+                                </form>
+                              </div>
+                            </Menu.Items>
+                          </Transition>
+                        </Menu>
                       }
                     </TableCell>
                   </TableRow>
                 );
               })}
-              {open && (
-                <Transition.Root show={open} as={Fragment}>
+              {openPopDel && (
+                <Transition.Root show={openPopDel} as={Fragment}>
                   <Dialog
                     as="div"
                     className="relative z-10"
                     initialFocus={cancelButtonRef}
-                    onClose={setOpen}
+                    onClose={setOpenPopDel}
                   >
                     <Transition.Child
                       as={Fragment}
@@ -212,13 +254,13 @@ export const ActivitiesTable = (props) => {
                                     as="h3"
                                     className="text-base font-semibold leading-6 text-gray-900"
                                   >
-                                    Deactivate account
+                                    Xoá hoạt động
                                   </Dialog.Title>
                                   <div className="mt-2">
                                     <p className="text-sm text-gray-500">
-                                      Are you sure you want to deactivate your account? All of your
-                                      data will be permanently removed. This action cannot be
-                                      undone.
+                                      Bạn có chắc chắn muốn hủy kích hoạt tài khoản của mình không?
+                                      Tất cả dữ liệu của bạn sẽ bị xóa vĩnh viễn. Hành động này
+                                      không thể được hoàn tác.
                                     </p>
                                   </div>
                                 </div>
@@ -236,7 +278,7 @@ export const ActivitiesTable = (props) => {
                                 type="button"
                                 className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
                                 onClick={() => {
-                                  setOpen(false);
+                                  setOpenPopDel(false);
                                   setSelectedId("");
                                 }}
                                 ref={cancelButtonRef}

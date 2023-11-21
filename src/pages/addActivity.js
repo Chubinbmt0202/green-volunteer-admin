@@ -2,15 +2,24 @@ import Head from "next/head";
 import { Box } from "@mui/material";
 import { Layout as DashboardLayout } from "src/layouts/dashboard/layout";
 import { PhotoIcon } from "@heroicons/react/24/solid";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { DayAdd } from "../sections/day/day-add";
 import axios from "axios";
 import { instance } from "src/api";
+import { textState } from "src/constants/constants";
+import { toast } from "react-toastify";
+import { useRecoilState } from "recoil";
+import { useRouter, withRouter } from "next/router";
+import CircularProgress from "@mui/material/CircularProgress";
+
 
 // Define the API endpoint
 
 const PageAddActivity = () => {
   const [formSections, setFormSections] = useState(1);
+  const [text, setText] = useRecoilState(textState);
+  const router = useRouter()
+  const [isSpiner, setIsSpiner] = useState(false);
 
   const addFormSection = () => {
     setFormSections((prevSections) => prevSections + 1);
@@ -40,7 +49,6 @@ const PageAddActivity = () => {
       [e.target.name]: value,
     });
   };
-
   const handleAddActivity = async () => {
     const postData = {
       title: data.title,
@@ -52,14 +60,30 @@ const PageAddActivity = () => {
       status: data.status,
     };
 
-    await instance.post("/activities", postData);
+    try {
+      await instance.post("/activities", postData);
+      setText({ changeState: true });
+      setIsSpiner(true);
+    } catch (error) {
+      console.error("Error adding activity:", error);
+    }
   };
+
+  useEffect(() => {
+    if (text.changeState) {
+      toast.success('Đã thêm hoạt động thành công!');
+      setIsSpiner(false)
+      setText({ changeState: false });
+      router.push('/activity')
+    }
+  }, [text]);
 
   return (
     <>
       <Head>
         <title>Activity | Create</title>
       </Head>
+      {isSpiner && <CircularProgress style={spinnerStyles} />}
       <Box
         component="main"
         sx={{

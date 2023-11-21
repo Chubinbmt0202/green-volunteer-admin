@@ -17,7 +17,6 @@ import { useRecoilState } from "recoil";
 import CircularProgress from "@mui/material/CircularProgress";
 import { is } from "date-fns/locale";
 import {overlayStyles, spinnerStyles, isSpiner} from '../styles/spinerStyle'
-import { useRouter, withRouter } from "next/router";
 
 const now = new Date();
 
@@ -27,7 +26,7 @@ const Page = () => {
   const [data, setData] = useState([]);
   const [text, setText] = useRecoilState(textState);
   const [isSpiner, setIsSpiner] = useState(false);
-  const router = useRouter()
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -37,11 +36,10 @@ const Page = () => {
         const response = await instance.get(
           `/activities?page=${"1"}&pageSize=${"50"}&status=${""}`
         );
-
+        console.log(response.data)
         setData(response.data.data.data);
       } catch (error) {
         console.error("Error fetching data:", error);
-        // Có lỗi, bạn có thể xử lý ở đây, chẳng hạn như hiển thị thông báo lỗi
       } finally {
         setIsSpiner(false);
       }
@@ -73,14 +71,11 @@ const Page = () => {
   const activities = useActivities(page, rowsPerPage);
   const activitiyId = useActivitiyId(activities);
   const activitiesSelection = useSelection(activitiyId);
-  const handleAdd = () => {
-    router.push('/addActivity')
-  }
 
   return (
     <>
       <Head>
-        <title>Bài viết | Green Volunteer</title>
+        <title>Hoạt động | Green Volunteer</title>
       </Head>
       <div style={overlayStyles}></div>
       <Box
@@ -96,42 +91,7 @@ const Page = () => {
             <Stack direction="row" justifyContent="space-between" spacing={4}>
               <Stack spacing={1}>
                 <Typography variant="h4">Các hoạt động</Typography>
-                <Stack alignItems="center" direction="row" spacing={1}>
-                  <Button
-                    color="inherit"
-                    startIcon={
-                      <SvgIcon fontSize="small">
-                        <ArrowUpOnSquareIcon />
-                      </SvgIcon>
-                    }
-                  >
-                    Import
-                  </Button>
-                  <Button
-                    color="inherit"
-                    startIcon={
-                      <SvgIcon fontSize="small">
-                        <ArrowDownOnSquareIcon />
-                      </SvgIcon>
-                    }
-                  >
-                    Export
-                  </Button>
-                </Stack>
               </Stack>
-              <div>
-                <Button
-                  startIcon={
-                    <SvgIcon fontSize="small">
-                      <PlusIcon />
-                    </SvgIcon>
-                  }
-                  onClick={handleAdd}
-                  variant="contained"
-                >
-                  Thêm hoạt động
-                </Button>
-              </div>
             </Stack>
             <ActivitiesSearch />
             <ActivitiesTable
