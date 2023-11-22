@@ -28,10 +28,11 @@ const PageAddPost = () => {
 
 
   const [postData, SetPostData] = useState({
+    id: id,
     title: "",
     body: "",
-    user_id: "1",
     images: "",
+    user_id: "1",
     status: "Active",
   });
 
@@ -47,7 +48,7 @@ const PageAddPost = () => {
   const handleUpdatePost = async () => {
     try {
       const response = await instance.put(`/posts`, postData);
-      console.log(">>>>>");
+      console.log(">>>>>", response.data);
 
       if (response.status === 200) {
         SetPostData(response)

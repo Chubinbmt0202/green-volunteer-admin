@@ -30,7 +30,7 @@ export const PostsSearch = () => {
         <OutlinedInput
           defaultValue=""
           fullWidth
-          placeholder="Tìm kiếm tên hoạt động"
+          placeholder="Tìm kiếm tên bài viết"
           startAdornment={
             <InputAdornment position="start">
               <SvgIcon className="ml-2" color="action" fontSize="small">
@@ -41,7 +41,7 @@ export const PostsSearch = () => {
           sx={{ maxWidth: 250, height: 40 }}
         />
 
-        <Menu as="div" className=" inline-block text-left h-[40px] ml-2">
+        {/* <Menu as="div" className=" inline-block text-left h-[40px] ml-2">
           <div className="w-22 h-full">
             <Menu.Button className="h-full items-center inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900  ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
               Chọn điểm đến
@@ -118,10 +118,10 @@ export const PostsSearch = () => {
               </div>
             </Menu.Items>
           </Transition>
-        </Menu>
+        </Menu> */}
 
 
-        <Menu as="div" className=" inline-block text-left h-[40px] ml-2">
+        {/* <Menu as="div" className=" inline-block text-left h-[40px] ml-2">
           <div className="w-22 h-full">
             <Menu.Button className="h-full items-center inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900  ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
               Trạng thái
@@ -183,7 +183,7 @@ export const PostsSearch = () => {
               </div>
             </Menu.Items>
           </Transition>
-        </Menu>
+        </Menu> */}
       </div>
 
       <div>
