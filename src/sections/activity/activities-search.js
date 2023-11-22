@@ -11,11 +11,22 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
+const menuItems = [
+  { label: "Đang hoạt động", status: "Active" },
+  { label: "Chưa hoạt động", status: "Inactive" },
+  { label: "Đã hoàn thành", status: "Completed" },
+];
+
 export const ActivitiesSearch = () => {
   const router = useRouter()
   const handleAdd = () => {
     router.push("/addActivity");
   };
+
+  const handleMenuItemClick = (status) => {
+    router.push(`activity?status=${status}`)
+    console.log("trạng thái đã click: ", status);
+  }
   return (
     <Card
       sx={{
@@ -141,45 +152,21 @@ export const ActivitiesSearch = () => {
           >
             <Menu.Items className="absolute z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
               <div className="py-1">
-                <Menu.Item>
-                  {({ active }) => (
-                    <a
-                      href="#"
-                      className={classNames(
-                        active ? "bg-gray-100 text-gray-900" : "text-gray-700",
-                        "block px-4 py-2 text-sm"
-                      )}
-                    >
-                      Đang hoạt động
-                    </a>
-                  )}
-                </Menu.Item>
-                <Menu.Item>
-                  {({ active }) => (
-                    <a
-                      href="#"
-                      className={classNames(
-                        active ? "bg-gray-100 text-gray-900" : "text-gray-700",
-                        "block px-4 py-2 text-sm"
-                      )}
-                    >
-                      Chưa hoạt động
-                    </a>
-                  )}
-                </Menu.Item>
-                <Menu.Item>
-                  {({ active }) => (
-                    <a
-                      href="#"
-                      className={classNames(
-                        active ? "bg-gray-100 text-gray-900" : "text-gray-700",
-                        "block px-4 py-2 text-sm"
-                      )}
-                    >
-                      Đã hoàn thành
-                    </a>
-                  )}
-                </Menu.Item>
+                {menuItems.map((item) => (
+                  <Menu.Item key={item.status}>
+                    {({ active }) => (
+                      <a
+                        onClick={() => handleMenuItemClick(item.status)}
+                        className={classNames(
+                          active ? "bg-gray-100 text-gray-900" : "text-gray-700",
+                          "block px-4 py-2 text-sm"
+                        )}
+                      >
+                        {item.label}
+                      </a>
+                    )}
+                  </Menu.Item>
+                ))}
               </div>
             </Menu.Items>
           </Transition>

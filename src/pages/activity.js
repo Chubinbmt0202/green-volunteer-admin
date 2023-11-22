@@ -17,8 +17,8 @@ import { useRecoilState } from "recoil";
 import CircularProgress from "@mui/material/CircularProgress";
 import { is } from "date-fns/locale";
 import {overlayStyles, spinnerStyles, isSpiner} from '../styles/spinerStyle'
+import { useRouter } from "next/router";
 
-const now = new Date();
 
 const Page = () => {
   const [page, setPage] = useState(0);
@@ -26,18 +26,20 @@ const Page = () => {
   const [data, setData] = useState([]);
   const [text, setText] = useRecoilState(textState);
   const [isSpiner, setIsSpiner] = useState(false);
-
+  const router = useRouter()
+  const { status } = router.query;
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         setIsSpiner(true);
-
-        const response = await instance.get(
-          `/activities?page=${"1"}&pageSize=${"50"}&status=${""}`
-        );
-        console.log(response.data)
-        setData(response.data.data.data);
+        if (!status) {
+          const response = await instance.get(`/activities?page=${"1"}&pageSize=${"50"}`);
+          setData(response.data.data.data);
+        } else {
+          const responseStatus = await instance.get(`/activities/${status}`);
+          setData(responseStatus.data.data.data);
+        }
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
@@ -46,7 +48,7 @@ const Page = () => {
     };
 
     fetchData();
-  }, [text]);
+  }, [text, status]);
 
   const useActivities = (page, rowsPerPage) => {
     return useMemo(() => {

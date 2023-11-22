@@ -27,6 +27,8 @@ import { instance } from "src/api";
 import { toast } from "react-toastify";
 import { useRecoilState } from "recoil";
 import { textState } from "src/constants/constants";
+import { Link } from "react-router-dom";
+
 
 export const ActivitiesTable = (props) => {
   const [openPopDel, setOpenPopDel] = useState(false);
@@ -86,6 +88,12 @@ export const ActivitiesTable = (props) => {
     router.push(`/updateActivity?id=${id}`);
   };
 
+  const handleDetail = (id) => {
+    router.push(`/detailActivity?id=${id}`);
+  };
+  
+  
+
   return (
     <Card>
       <Scrollbar>
@@ -133,16 +141,18 @@ export const ActivitiesTable = (props) => {
                       />
                     </TableCell>
                     <TableCell>
-                      <Stack alignItems="center" direction="row" spacing={2}>
-                        <Typography variant="subtitle2">{activity.title}</Typography>
-                      </Stack>
+                      <a className=" cursor-pointer text-cyan-700" onClick={() => handleDetail(activity.id)}>
+                          <Stack alignItems="center" direction="row" spacing={2}>
+                            <Typography variant="subtitle2">{activity.title}</Typography>
+                          </Stack>
+                      </a>
                     </TableCell>
-                    <TableCell>{activity.timeStart}</TableCell>
-                    <TableCell>{activity.time_end}</TableCell>
+                    <TableCell>{format(new Date(activity.timeStart), 'yyyy-MM-dd')}</TableCell>
+                    <TableCell>{format(new Date(activity.time_end), 'yyyy-MM-dd')}</TableCell>
                     <TableCell>{activity.num_vol}</TableCell>
                     <TableCell>{activity.address}</TableCell>
                     <TableCell>{"Đang"}</TableCell>
-                    <TableCell >
+                    <TableCell>
                       {
                         <Menu as="div" className="relative inline-block text-left">
                           <div>
