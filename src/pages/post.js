@@ -77,7 +77,7 @@ const Page = () => {
   return (
     <>
       <Head>
-        <title>Hoạt động | Green Volunteer</title>
+        <title>Bài viết | Green Volunteer</title>
       </Head>
       <div style={overlayStyles}></div>
       <Box
@@ -92,7 +92,7 @@ const Page = () => {
           <Stack spacing={3}>
             <Stack direction="row" justifyContent="space-between" spacing={4}>
               <Stack spacing={1}>
-                <Typography variant="h4">Các hoạt động</Typography>
+                <Typography variant="h4">Các bài viết</Typography>
               </Stack>
             </Stack>
             <PostsSearch />
