@@ -20,26 +20,37 @@ const PageAddActivity = () => {
   const [text, setText] = useRecoilState(textState);
   const router = useRouter()
   const [isSpiner, setIsSpiner] = useState(false);
+  const [selectedFiles, setSelectedFiles] = useState([]);
+
+  const handleFileChange = (event) => {
+    const files = event.target.files;
+
+    if (files.length > 0) {
+      const fileArray = Array.from(files).map((file) => URL.createObjectURL(file));
+      setSelectedFiles(fileArray);
+    }
+  };
 
   const addFormSection = () => {
     setFormSections((prevSections) => prevSections + 1);
   };
-
+  
   const removeFormSection = () => {
     if (formSections > 1) {
       setFormSections((prevSections) => prevSections - 1);
     }
   };
-
-
+  
   const [data, setData] = useState({
     title: "",
     body: "",
+    images: [],
     timeStart: "",
     time_end: "",
     num_vol: "",
     address: "",
     status: "Active",
+    details: "",
   });
 
   const handleChange = (e) => {
@@ -58,7 +69,7 @@ const PageAddActivity = () => {
       num_vol: data.num_vol,
       address: data.address,
       status: data.status,
-    };
+          };
 
     try {
       await instance.post("/activities", postData);
@@ -68,6 +79,7 @@ const PageAddActivity = () => {
       console.error("Error adding activity:", error);
     }
   };
+
 
   useEffect(() => {
     if (text.changeState) {
@@ -149,7 +161,8 @@ const PageAddActivity = () => {
                   </label>
                   <div className="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
                     <div className="text-center">
-                      <PhotoIcon className="mx-auto h-12 w-12 text-gray-300" aria-hidden="true" />
+                      <PhotoIcon className="mx-auto h-12 w-12 text-gray-300" 
+                      aria-hidden="true" />
                       <div className="mt-4 flex text-sm leading-6 text-gray-600">
                         <label
                           htmlFor="coverThumnalil"
@@ -161,8 +174,18 @@ const PageAddActivity = () => {
                             name="file-upload"
                             type="file"
                             className="sr-only"
+                            onChange={handleFileChange}
                             multiple
                           />
+                          {selectedFiles.map((file, index) => (
+                            <img
+                              className=" inline-block"
+                              key={index}
+                              src={file}
+                              alt={`Selected ${index + 1}`}
+                              style={{ maxWidth: "100%", maxHeight: "200px", margin: "4px" }}
+                            />
+                          ))}
                         </label>
                         <p className="pl-1">or drag and drop</p>
                       </div>
@@ -263,22 +286,20 @@ const PageAddActivity = () => {
               Thông tin chi tiết về chuyến đi
             </h2>
             <p className="mt-1 text-sm leading-6 text-gray-600">Hãy mô tả thêm về chuyến đi</p>
-
-            {/* Chi tiết ngày */}
           </div>
-
-          {/* Chi tiết ngày */}
-
           {[...Array(formSections)].map((_, index) => (
-            <div key={index} className="max-w-4xl ml-10 mt-6">
+            <div key={index} 
+            className="max-w-4xl ml-10 mt-6">
               <h2 className="text-base font-semibold leading-7 text-gray-900">
                 Chi tiết ngày {index + 1}
               </h2>
               <div className="mt-2">
                 <textarea
                   placeholder={`8h: Xuất phát tại Hà Nội – TP Hà Giang – Quản Bạ\n9h30: Tập trung di chuyển tại 142 Giảng Võ (Cửa hàng Kính mắt Việt Tín), Ba Đình, Hà Nội.\n20h00: Đoàn bắt đầu xuất phát.`}
-                  id="aboutDay"
-                  name="about"
+                  id={`details-${index}`}
+                  name="details"
+                  value={data.details}
+                  onChange={(e) => handleChange(e, index)}
                   rows={3}
                   className=" px-5 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 />
@@ -304,7 +325,8 @@ const PageAddActivity = () => {
           </div>
 
           <div className="mt-6 flex items-center justify-end gap-x-6">
-            <button type="button" className="text-sm font-semibold leading-6 text-gray-900">
+            <button type="button" 
+            className="text-sm font-semibold leading-6 text-gray-900">
               Huỷ
             </button>
             <button

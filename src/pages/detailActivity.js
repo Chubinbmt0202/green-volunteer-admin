@@ -7,7 +7,7 @@ import { instance } from "src/api";
 import CircularProgress from "@mui/material/CircularProgress";
 import { overlayStyles, spinnerStyles, isSpiner } from "../styles/spinerStyle";
 import { useRouter } from "next/router";
-import { format } from 'date-fns';
+import { format } from "date-fns";
 // ...
 
 const Page = () => {
@@ -58,43 +58,66 @@ const Page = () => {
         {dataActivity && (
           <Container>
             <div>
-  <div className="px-4 sm:px-0">
-    <h3 className="text-base font-bold leading-7 text-gray-900">Chi tiết hoạt động</h3>
-  </div>
-  <div className="mt-6 border-t border-gray-100">
-    <dl className="divide-y divide-gray-100">
-      <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-        <dt className="text-sm font-medium leading-6 text-gray-900">Tiêu đề</dt>
-        <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{dataActivity.data.title}</dd>
-      </div>
-      <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-        <dt className="text-sm font-medium leading-6 text-gray-900">Địa điểm</dt>
-        <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{dataActivity.data.address}</dd>
-      </div>
-      <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-        <dt className="text-sm font-medium leading-6 text-gray-900">Số lượng tình nguyện viên</dt>
-        <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{dataActivity.data.num_vol}</dd>
-      </div>
-      <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-        <dt className="text-sm font-medium leading-6 text-gray-900">Trạng thái</dt>
-        <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{dataActivity.data.status}</dd>
-      </div>
-      <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-        <dt className="text-sm font-medium leading-6 text-gray-900">Thời gian đi</dt>
-        <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{format(new Date(dataActivity.data.timeStart), 'yyyy-MM-dd')}</dd>
-      </div>
-      <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-        <dt className="text-sm font-medium leading-6 text-gray-900">Thời gian về</dt>
-        <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{format(new Date(dataActivity.data.time_end), 'yyyy-MM-dd')}</dd>
-      </div>
-      <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-        <dt className="text-sm font-medium leading-6 text-gray-900">Nội dung</dt>
-        <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{dataActivity.data.body}</dd>
-      </div>
-    </dl>
-  </div>
-</div>
-
+              <div className="px-4 sm:px-0">
+                <h3 className="text-base font-bold leading-7 text-gray-900">Chi tiết hoạt động</h3>
+              </div>
+              <div className="mt-6 border-t border-gray-100">
+                <dl className="divide-y divide-gray-100">
+                  <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                    <dt className="text-sm font-medium leading-6 text-gray-900">Tiêu đề</dt>
+                    <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                      {dataActivity.data.title}
+                    </dd>
+                  </div>
+                  <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                    <dt className="text-sm font-medium leading-6 text-gray-900">Địa điểm</dt>
+                    <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                      {dataActivity.data.address}
+                    </dd>
+                  </div>
+                  <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                    <dt className="text-sm font-medium leading-6 text-gray-900">
+                      Số lượng tình nguyện viên
+                    </dt>
+                    <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                      {dataActivity.data.num_vol}
+                    </dd>
+                  </div>
+                  <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                    <dt className="text-sm font-medium leading-6 text-gray-900">Trạng thái</dt>
+                    <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                      {dataActivity.data.status}
+                    </dd>
+                  </div>
+                  <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                    <dt className="text-sm font-medium leading-6 text-gray-900">Thời gian đi</dt>
+                    <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                      {format(new Date(dataActivity.data.timeStart), "yyyy-MM-dd")}
+                    </dd>
+                  </div>
+                  <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                    <dt className="text-sm font-medium leading-6 text-gray-900">Thời gian về</dt>
+                    <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                      {format(new Date(dataActivity.data.time_end), "yyyy-MM-dd")}
+                    </dd>
+                  </div>
+                  <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                    <dt className="text-sm font-medium leading-6 text-gray-900">Nội dung</dt>
+                    <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                      {dataActivity.data.body}
+                    </dd>
+                  </div>
+                  <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                    <dt className="text-sm font-medium leading-6 text-gray-900">
+                      Chi tiết hoạt động
+                    </dt>
+                    <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                      {dataActivity.data.details}
+                    </dd>
+                  </div>
+                </dl>
+              </div>
+            </div>
           </Container>
         )}
       </Box>

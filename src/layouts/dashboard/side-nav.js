@@ -131,21 +131,6 @@ export const SideNav = (props) => {
           }}
         >
 
-          <Button
-            component="a"
-            endIcon={(
-              <SvgIcon fontSize="small">
-                <ArrowTopRightOnSquareIcon />
-              </SvgIcon>
-            )}
-            fullWidth
-            href="https://material-kit-pro-react.devias.io/"
-            sx={{ mt: 2 }}
-            target="_blank"
-            variant="contained"
-          >
-            Pro Live Preview
-          </Button>
         </Box>
       </Box>
     </Scrollbar>
