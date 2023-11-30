@@ -3,7 +3,6 @@ import { format } from "date-fns";
 import { Fragment, useEffect, useRef, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
-import { Spin } from "antd";
 import { useRouter, withRouter } from "next/router";
 import { Menu } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
@@ -22,12 +21,10 @@ import {
   Typography,
 } from "@mui/material";
 import { Scrollbar } from "src/components/scrollbar";
-import { getInitials } from "src/utils/get-initials";
 import { instance } from "src/api";
 import { toast } from "react-toastify";
 import { useRecoilState } from "recoil";
 import { textState } from "src/constants/constants";
-import { Link } from "react-router-dom";
 
 
 export const ActivitiesTable = (props) => {

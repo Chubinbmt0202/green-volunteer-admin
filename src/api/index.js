@@ -16,4 +16,3 @@ export const instance = axios.create({
   baseURL: `${baseURL}/api`,
   headers: { "X-Custom-Header": "foobar", "Authorization": `Bearer ${authToken}` },
 });
-

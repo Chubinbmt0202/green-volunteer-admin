@@ -37,7 +37,7 @@ const Page = () => {
           const response = await instance.get(`/activities?page=${"1"}&pageSize=${"50"}`);
           setData(response.data.data.data);
         } else {
-          const responseStatus = await instance.get(`/activities/${status}`);
+          const responseStatus = await instance.get(`/activities/?status=${status}`);
           setData(responseStatus.data.data.data);
         }
       } catch (error) {

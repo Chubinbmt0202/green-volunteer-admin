@@ -86,6 +86,13 @@ export const PostsTable = (props) => {
     router.push(`/updatePost?id=${id}`);
   };
 
+  function truncateString(str, maxLength) {
+    if (str.length > maxLength) {
+      return str.substring(0, maxLength) + '...';
+    }
+    return str;
+  }
+
   return (
     <Card>
       <Scrollbar>
@@ -136,7 +143,7 @@ export const PostsTable = (props) => {
                       </Stack>
                     </TableCell>
                     
-                    <TableCell>{post.body}</TableCell>
+                    <TableCell>{truncateString(post.body, 100)}</TableCell>
                     <TableCell>{"Đang"}</TableCell>
                     <TableCell>{post.created_at}</TableCell>
                     <TableCell>
