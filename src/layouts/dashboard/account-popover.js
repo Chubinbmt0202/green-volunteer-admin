@@ -11,6 +11,7 @@ export const AccountPopover = (props) => {
 
   const handleSignOut = useCallback(
     () => {
+      localStorage.removeItem("authToken");
       onClose?.();
       auth.signOut();
       router.push('/auth/login');
@@ -42,7 +43,7 @@ export const AccountPopover = (props) => {
           color="text.secondary"
           variant="body2"
         >
-          Trung Anh
+          Admin
         </Typography>
       </Box>
       <Divider />

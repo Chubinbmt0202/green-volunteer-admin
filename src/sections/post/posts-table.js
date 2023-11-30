@@ -3,6 +3,7 @@ import { format } from "date-fns";
 import { Fragment, useEffect, useRef, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
+import { Spin } from "antd";
 import { useRouter, withRouter } from "next/router";
 import { Menu } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
@@ -21,13 +22,13 @@ import {
   Typography,
 } from "@mui/material";
 import { Scrollbar } from "src/components/scrollbar";
+import { getInitials } from "src/utils/get-initials";
 import { instance } from "src/api";
 import { toast } from "react-toastify";
 import { useRecoilState } from "recoil";
 import { textState } from "src/constants/constants";
 
-
-export const ActivitiesTable = (props) => {
+export const PostsTable = (props) => {
   const [openPopDel, setOpenPopDel] = useState(false);
   const [openPopUpDate, setOpenPopUpdate] = useState(false);
   const cancelButtonRef = useRef(null);
@@ -58,7 +59,7 @@ export const ActivitiesTable = (props) => {
     try {
       if (selectedId) {
         setOpenPopDel(false);
-        const response = await instance.delete(`/activities/${selectedId}`);
+        const response = await instance.delete(`/posts/${selectedId}`);
 
         if (response.status === 200) {
           setText((oldText) => ({
@@ -82,14 +83,15 @@ export const ActivitiesTable = (props) => {
   };
 
   const handleUpdate = (id) => {
-    router.push(`/updateActivity?id=${id}`);
+    router.push(`/updatePost?id=${id}`);
   };
 
-  const handleDetail = (id) => {
-    router.push(`/detailActivity?id=${id}`);
-  };
-  
-  
+  function truncateString(str, maxLength) {
+    if (str.length > maxLength) {
+      return str.substring(0, maxLength) + '...';
+    }
+    return str;
+  }
 
   return (
     <Card>
@@ -112,43 +114,38 @@ export const ActivitiesTable = (props) => {
                   />
                 </TableCell>
                 <TableCell>Tiều đề</TableCell>
-                <TableCell>Thời gian đi</TableCell>
-                <TableCell>Thời gian về</TableCell>
-                <TableCell>Số lượng</TableCell>
-                <TableCell>Địa chỉ</TableCell>
+                <TableCell>Mô tả</TableCell>
                 <TableCell>Trạng thái</TableCell>
+                <TableCell>Thời gian tạo</TableCell>
                 <TableCell>Hoạt động</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {items.map((activity) => {
-                const isSelected = selected.includes(activity.id);
+              {items.map((post) => {
+                const isSelected = selected.includes(post.id);
                 return (
-                  <TableRow hover key={activity.id} selected={isSelected}>
+                  <TableRow hover key={post.id} selected={isSelected}>
                     <TableCell padding="checkbox">
                       <Checkbox
                         checked={isSelected}
                         onChange={(event) => {
                           if (event.target.checked) {
-                            onSelectOne?.(activity.id);
+                            onSelectOne?.(post.id);
                           } else {
-                            onDeselectOne?.(activity.id);
+                            onDeselectOne?.(post.id);
                           }
                         }}
                       />
                     </TableCell>
                     <TableCell>
-                      <a className=" cursor-pointer text-cyan-700" onClick={() => handleDetail(activity.id)}>
-                          <Stack alignItems="center" direction="row" spacing={2}>
-                            <Typography variant="subtitle2">{activity.title}</Typography>
-                          </Stack>
-                      </a>
+                      <Stack alignItems="center" direction="row" spacing={2}>
+                        <Typography variant="subtitle2">{post.title}</Typography>
+                      </Stack>
                     </TableCell>
-                    <TableCell>{format(new Date(activity.timeStart), 'yyyy-MM-dd')}</TableCell>
-                    <TableCell>{format(new Date(activity.time_end), 'yyyy-MM-dd')}</TableCell>
-                    <TableCell>{activity.num_vol}</TableCell>
-                    <TableCell>{activity.address}</TableCell>
+                    
+                    <TableCell>{truncateString(post.body, 100)}</TableCell>
                     <TableCell>{"Đang"}</TableCell>
+                    <TableCell>{post.created_at}</TableCell>
                     <TableCell>
                       {
                         <Menu as="div" className="relative inline-block text-left">
@@ -179,7 +176,7 @@ export const ActivitiesTable = (props) => {
                                     <a
                                       onClick={() => {
                                         setOpenPopDel(true);
-                                        setSelectedId(activity.id);
+                                        setSelectedId(post.id);
                                       }}
                                       className={classNames(
                                         active ? "bg-gray-100 text-gray-900" : "text-gray-700",
@@ -195,7 +192,7 @@ export const ActivitiesTable = (props) => {
                                     {({ active }) => (
                                       <a
                                         onClick={() => {
-                                          setSelectedId(activity.id), handleUpdate(activity.id);
+                                          setSelectedId(post.id), handleUpdate(post.id);
                                         }}
                                         className={classNames(
                                           active ? "bg-gray-100 text-gray-900" : "text-gray-700",
@@ -319,7 +316,7 @@ export const ActivitiesTable = (props) => {
   );
 };
 
-ActivitiesTable.propTypes = {
+PostsTable.propTypes = {
   count: PropTypes.number,
   items: PropTypes.array,
   onDeselectAll: PropTypes.func,

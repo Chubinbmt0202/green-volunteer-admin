@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
+import {PostTable, PostsTable} from "src/sections/post/posts-table"
 import Head from "next/head";
 import { subDays, subHours } from "date-fns";
 import ArrowDownOnSquareIcon from "@heroicons/react/24/solid/ArrowDownOnSquareIcon";
@@ -17,8 +18,9 @@ import { useRecoilState } from "recoil";
 import CircularProgress from "@mui/material/CircularProgress";
 import { is } from "date-fns/locale";
 import {overlayStyles, spinnerStyles, isSpiner} from '../styles/spinerStyle'
-import { useRouter } from "next/router";
+import { PostsSearch } from "src/sections/post/posts-search";
 
+const now = new Date();
 
 const Page = () => {
   const [page, setPage] = useState(0);
@@ -26,20 +28,18 @@ const Page = () => {
   const [data, setData] = useState([]);
   const [text, setText] = useRecoilState(textState);
   const [isSpiner, setIsSpiner] = useState(false);
-  const router = useRouter()
-  const { status } = router.query;
+
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         setIsSpiner(true);
-        if (!status) {
-          const response = await instance.get(`/activities?page=${"1"}&pageSize=${"50"}`);
-          setData(response.data.data.data);
-        } else {
-          const responseStatus = await instance.get(`/activities/?status=${status}`);
-          setData(responseStatus.data.data.data);
-        }
+
+        const response = await instance.get(
+          `/posts?page=${"1"}&pageSize=${"50"}&status=${""}`
+        );
+        console.log(response.data)
+        setData(response.data.data.data);
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
@@ -48,18 +48,18 @@ const Page = () => {
     };
 
     fetchData();
-  }, [text, status]);
+  }, [text]);
 
-  const useActivities = (page, rowsPerPage) => {
+  const usePosts = (page, rowsPerPage) => {
     return useMemo(() => {
       return applyPagination(data, page, rowsPerPage);
     }, [page, rowsPerPage, data]);
   };
 
-  const useActivitiyId = (activities) => {
+  const usePostId = (posts) => {
     return useMemo(() => {
-      return activities.map((customer) => customer.id);
-    }, [activities]);
+      return posts.map((customer) => customer.id);
+    }, [posts]);
   };
 
   const handlePageChange = useCallback((event, value) => {
@@ -70,14 +70,14 @@ const Page = () => {
     setRowsPerPage(event.target.value);
   }, []);
 
-  const activities = useActivities(page, rowsPerPage);
-  const activitiyId = useActivitiyId(activities);
-  const activitiesSelection = useSelection(activitiyId);
+  const posts = usePosts(page, rowsPerPage);
+  const postId = usePostId(posts);
+  const postsSelection = useSelection(postId);
 
   return (
     <>
       <Head>
-        <title>Hoạt động | Green Volunteer</title>
+        <title>Bài viết | Green Volunteer</title>
       </Head>
       <div style={overlayStyles}></div>
       <Box
@@ -92,22 +92,22 @@ const Page = () => {
           <Stack spacing={3}>
             <Stack direction="row" justifyContent="space-between" spacing={4}>
               <Stack spacing={1}>
-                <Typography variant="h4">Các hoạt động</Typography>
+                <Typography variant="h4">Các bài viết</Typography>
               </Stack>
             </Stack>
-            <ActivitiesSearch />
-            <ActivitiesTable
+            <PostsSearch />
+            <PostsTable
               count={data.length}
-              items={activities}
-              onDeselectAll={activitiesSelection.handleDeselectAll}
-              onDeselectOne={activitiesSelection.handleDeselectOne}
+              items={posts}
+              onDeselectAll={postsSelection.handleDeselectAll}
+              onDeselectOne={postsSelection.handleDeselectOne}
               onPageChange={handlePageChange}
               onRowsPerPageChange={handleRowsPerPageChange}
-              onSelectAll={activitiesSelection.handleSelectAll}
-              onSelectOne={activitiesSelection.handleSelectOne}
+              onSelectAll={postsSelection.handleSelectAll}
+              onSelectOne={postsSelection.handleSelectOne}
               page={page}
               rowsPerPage={rowsPerPage}
-              selected={activitiesSelection.selected}
+              selected={postsSelection.selected}
             />
           </Stack>
         </Container>
