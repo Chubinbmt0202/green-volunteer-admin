@@ -31,6 +31,17 @@ const PageAddPost = () => {
     }
   };
 
+  const [selectedFiles, setSelectedFiles] = useState([]);
+
+  const handleFileChange = (event) => {
+    const files = event.target.files;
+
+    // Kiểm tra xem có file được chọn hay không
+    if (files.length > 0) {
+      const fileArray = Array.from(files).map((file) => URL.createObjectURL(file));
+      setSelectedFiles(fileArray);
+    }
+  };
 
   const [data, setData] = useState({
     title: "",

@@ -97,7 +97,7 @@ export const Layout = (props) => {
             </Typography>
             <img
               alt=""
-              src="/assets/auth-illustration.svg"
+              src="https://doanthanhnien.vn/Content/uploads/images/132105924303681091_20_nam_tinh_nguyen_coverm_kexd.jpg"
             />
           </Box>
         </Grid>
