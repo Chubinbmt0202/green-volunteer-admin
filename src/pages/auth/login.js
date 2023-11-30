@@ -50,7 +50,7 @@ const Page = () => {
           localStorage.setItem('authToken', res.token);
           localStorage.setItem('user_id', res.user_id);
 
-          router.push("/");
+          router.push("/activity");
           
         }
       } catch (err) {
@@ -70,7 +70,7 @@ const Page = () => {
 
   const handleSkip = useCallback(
     () => {
-      router.push('/');
+      router.push('/activity');
     },
     [router]
   );

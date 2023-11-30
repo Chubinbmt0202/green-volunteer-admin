@@ -6,8 +6,3 @@ export const textState = atom({
     changeState: false,
   },
 });
-
-// export const checkActivityLoading= atom({
-//   key: "textState",
-//   default: false,
-// });
