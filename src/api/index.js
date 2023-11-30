@@ -6,5 +6,9 @@ const baseURL = "http://54.169.253.94";
 
 export const instance = axios.create({
   baseURL: `${baseURL}/api`,
-  headers: { "X-Custom-Header": "foobar" },
+  headers: {
+    "X-Custom-Header": "foobar",
+    'Content-Type': 'multipart/form-data',
+    "Authorization": `Bearer ${token}`,
+  },
 });
