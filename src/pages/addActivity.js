@@ -18,13 +18,15 @@ import CircularProgress from "@mui/material/CircularProgress";
 const PageAddActivity = () => {
   const [formSections, setFormSections] = useState(1);
   const [text, setText] = useRecoilState(textState);
-  const router = useRouter()
+  const router = useRouter();
   const [isSpiner, setIsSpiner] = useState(false);
   const [selectedFiles, setSelectedFiles] = useState([]);
+  const [images, setImages] = useState(null);
 
   const handleFileChange = (event) => {
     const files = event.target.files;
 
+    setImages(event.target.files)
     if (files.length > 0) {
       const fileArray = Array.from(files).map((file) => URL.createObjectURL(file));
       setSelectedFiles(fileArray);
@@ -34,7 +36,7 @@ const PageAddActivity = () => {
   const addFormSection = () => {
     setFormSections((prevSections) => prevSections + 1);
   };
-  
+
   const removeFormSection = () => {
     if (formSections > 1) {
       setFormSections((prevSections) => prevSections - 1);
@@ -44,7 +46,6 @@ const PageAddActivity = () => {
   const [data, setData] = useState({
     title: "",
     body: "",
-    images: [],
     timeStart: "",
     time_end: "",
     num_vol: "",
@@ -69,10 +70,19 @@ const PageAddActivity = () => {
       num_vol: data.num_vol,
       address: data.address,
       status: data.status,
-          };
+    };
+
+
+    let formData = new FormData();
+    for (let i = 0; i < images.length; i++) {
+      formData.append('images[]', images[i]);
+    }
+    Object.keys(postData).forEach((key) => {
+      formData.append(key, postData[key]);
+    });
 
     try {
-      await instance.post("/activities", postData);
+      await instance.post("/activities", formData);
       setText({ changeState: true });
       setIsSpiner(true);
     } catch (error) {
@@ -80,13 +90,12 @@ const PageAddActivity = () => {
     }
   };
 
-
   useEffect(() => {
     if (text.changeState) {
-      toast.success('Đã thêm hoạt động thành công!');
-      setIsSpiner(false)
+      toast.success("Đã thêm hoạt động thành công!");
+      setIsSpiner(false);
       setText({ changeState: false });
-      router.push('/activity')
+      router.push("/activity");
     }
   }, [text]);
 
@@ -161,8 +170,7 @@ const PageAddActivity = () => {
                   </label>
                   <div className="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
                     <div className="text-center">
-                      <PhotoIcon className="mx-auto h-12 w-12 text-gray-300" 
-                      aria-hidden="true" />
+                      <PhotoIcon className="mx-auto h-12 w-12 text-gray-300" aria-hidden="true" />
                       <div className="mt-4 flex text-sm leading-6 text-gray-600">
                         <label
                           htmlFor="coverThumnalil"
@@ -171,10 +179,11 @@ const PageAddActivity = () => {
                           <span>Upload a file</span>
                           <input
                             id="coverThumnalil"
-                            name="file-upload"
+                            name="file[]"
                             type="file"
                             className="sr-only"
                             onChange={handleFileChange}
+                            accept="image/*"
                             multiple
                           />
                           {selectedFiles.map((file, index) => (
@@ -288,8 +297,7 @@ const PageAddActivity = () => {
             <p className="mt-1 text-sm leading-6 text-gray-600">Hãy mô tả thêm về chuyến đi</p>
           </div>
           {[...Array(formSections)].map((_, index) => (
-            <div key={index} 
-            className="max-w-4xl ml-10 mt-6">
+            <div key={index} className="max-w-4xl ml-10 mt-6">
               <h2 className="text-base font-semibold leading-7 text-gray-900">
                 Chi tiết ngày {index + 1}
               </h2>
@@ -325,8 +333,7 @@ const PageAddActivity = () => {
           </div>
 
           <div className="mt-6 flex items-center justify-end gap-x-6">
-            <button type="button" 
-            className="text-sm font-semibold leading-6 text-gray-900">
+            <button type="button" className="text-sm font-semibold leading-6 text-gray-900">
               Huỷ
             </button>
             <button
