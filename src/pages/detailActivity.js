@@ -13,6 +13,7 @@ import { format } from "date-fns";
 const Page = () => {
   const [dataActivity, setDataActivity] = useState();
   const [isSpiner, setIsSpiner] = useState(false);
+  const [image, setImage] = useState([]);
   const router = useRouter();
   const { id } = router.query;
 
@@ -114,6 +115,19 @@ const Page = () => {
                     <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
                       {dataActivity.data.details}
                     </dd>
+                  </div>
+                  <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                    <dt className="text-sm font-medium leading-6 text-gray-900">Hình ảnh</dt>
+                    <div style={{ display: "flex" }}>
+                      {dataActivity.data.images.map((image) => (
+                        <img
+                          key={image.id}
+                          src={image.image_url}
+                          alt={`Image ${image.id}`}
+                          style={{ maxWidth: "100px", marginRight: "10px" }}
+                        />
+                      ))}
+                    </div>
                   </div>
                 </dl>
               </div>
