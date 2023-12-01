@@ -64,11 +64,11 @@ const Page = () => {
         >
           <div>
             <Stack spacing={1} sx={{ mb: 3 }}>
-              <Typography variant="h4">Register</Typography>
+              <Typography variant="h4">Đăng ký hệ thống</Typography>
               <Typography color="text.secondary" variant="body2">
-                Already have an account? &nbsp;
+                Bạn đã có tài khoản? &nbsp;
                 <Link component={NextLink} href="/auth/login" underline="hover" variant="subtitle2">
-                  Log in
+                  Đăng nhập
                 </Link>
               </Typography>
             </Stack>
@@ -88,7 +88,7 @@ const Page = () => {
                   error={!!(formik.touched.email && formik.errors.email)}
                   fullWidth
                   helperText={formik.touched.email && formik.errors.email}
-                  label="Email Address"
+                  label="Email"
                   name="email"
                   onBlur={formik.handleBlur}
                   onChange={formik.handleChange}
@@ -119,7 +119,7 @@ const Page = () => {
                 type="submit"
                 variant="contained"
               >
-                Continue
+                Đăng kí
               </Button>
             </form>
           </div>
